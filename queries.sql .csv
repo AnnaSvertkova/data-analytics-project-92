@@ -1,0 +1,2 @@
+select count(*) as customers_count; запрос, который считает общее количество покупателей из таблицы customers.
+"from customers;";
