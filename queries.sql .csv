@@ -37,7 +37,7 @@ having avg (sales.quantity * products.price) < (select average_all from tab);
 ;
 №3;
 select;
-CONCAT(employees.first_name,' ', employees.last_name) seller, -- имя и фамилия продавца;
+CONCAT(employees.first_name,' ', employees.last_name) seller, -- имя и фамилия продfвца;
 to_char (sales.sale_date, 'day') day_of_week,;
 floor(sum(sales.quantity * products.price)) income --суммарная выручка продавца;
 from employees;
