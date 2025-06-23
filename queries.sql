@@ -63,14 +63,23 @@ group by selling_month
 order by selling_month;
 
 
-select 
-distinct on (customers.customer_id)
+with tab as 
+(select 
 CONCAT(customers.first_name,' ', customers.last_name) customer, --имя и фамилия покупателя
-sales.sale_date, 
+sales.sale_date,
 CONCAT(employees.first_name,' ', employees.last_name) seller -- имя и фамилия продавца
-from customers
-inner join sales on customers.customer_id = sales.customer_id
-inner join employees on sales.sales_person_id = employees.employee_id
-inner join products on sales.product_id = products.product_id
+from sales
+left join customers on sales.customer_id = customers.customer_id
+left join employees on sales.sales_person_id = employees.employee_id
+left join products on sales.product_id = products.product_id
 where products.price = 0 --акционные товары отпускали со стоимостью равной 0
-order by customers.customer_id;
+order by customers.customer_id),
+tab2 as (
+select 
+customer, sale_date, seller, 
+row_number() over (partition by customer order by sale_date) as rn
+from tab)
+select 
+customer, sale_date, seller
+from tab2
+where rn = 1;
