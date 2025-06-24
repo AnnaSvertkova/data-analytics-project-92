@@ -17,6 +17,7 @@ with tab as (
     from sales
     inner join products on sales.product_id = products.product_id
 )
+
 select
     concat(employees.first_name, ' ', employees.last_name) as seller,
     floor(avg(sales.quantity * products.price)) as average_income
@@ -69,6 +70,7 @@ with tab as (
     where products.price = 0
     order by customers.customer_id
 ),
+
 tab2 as (
     select
         customer,
@@ -77,6 +79,7 @@ tab2 as (
         row_number() over (partition by customer order by sale_date) as rn
     from tab
 )
+
 select
     customer,
     sale_date,
