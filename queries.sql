@@ -25,7 +25,7 @@ from employees
 inner join sales on employees.employee_id = sales.sales_person_id
 inner join products on sales.product_id = products.product_id
 group by seller
-having avg(sales.quantity * products.price) < (select average_all from tab)
+having avg(sales.quantity * products.price) < (select tab.average_all from tab)
 order by average_income;
 
 select
