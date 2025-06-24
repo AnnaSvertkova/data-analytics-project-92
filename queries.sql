@@ -1,8 +1,6 @@
-#1
 select count(customer_id) as customers_count
 from customers;
 
-#2
 select
     -- имя и фамилия продовца
     concat(employees.first_name, ' ', employees.last_name) as seller,
@@ -16,7 +14,6 @@ group by seller
 order by income desc
 limit 10;
 
-#3
 with tab as (
     select floor(avg(sales.quantity * products.price)) as average_all
     --средняя выручка за сделку по всем продавцам
@@ -34,7 +31,6 @@ group by seller
 having avg(sales.quantity * products.price) < (select average_all from tab)
 order by average_income;
 
-#4
 select
     -- имя и фамилия продfвца
     concat(employees.first_name, ' ', employees.last_name) as seller,
@@ -47,7 +43,6 @@ inner join products on sales.product_id = products.product_id
 group by extract(isodow from sales.sale_date), seller, day_of_week
 order by extract(isodow from sales.sale_date), seller;
 
-#5
 select
     case
         when (age) between 16 and 25 then '16-25'
@@ -59,7 +54,6 @@ from customers
 group by age_category
 order by age_category;
 
-#6
 select
     to_char(sales.sale_date, 'YYYY-MM') as selling_month,
     count(distinct sales.customer_id) as total_customers,
@@ -69,7 +63,6 @@ inner join products on sales.product_id = products.product_id
 group by selling_month
 order by selling_month;
 
-#7
 with tab as (
     select
         --имя и фамилия покупателя
