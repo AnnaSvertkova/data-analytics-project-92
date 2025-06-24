@@ -76,7 +76,10 @@ tab2 as (
         customer,
         sale_date,
         seller,
-        row_number() over (partition by customer order by sale_date) as rn
+        row_number() over (
+            partition by customer
+            order by sale_date
+        ) as rn
     from tab
 )
 
