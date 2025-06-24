@@ -38,8 +38,8 @@ floor(sum(sales.quantity * products.price)) income --суммарная выру
 from employees
 join sales on employees.employee_id = sales.sales_person_id
 join products on sales.product_id = products.product_id
-group by to_char (sales.sale_date, 'D'), seller, day_of_week
-order by to_char (sales.sale_date, 'D'), seller;
+GROUP BY EXTRACT(ISODOW FROM sales.sale_date), seller, day_of_week
+ORDER BY EXTRACT(ISODOW FROM sales.sale_date), seller;
 
 
 select
