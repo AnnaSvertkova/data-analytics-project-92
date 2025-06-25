@@ -13,18 +13,18 @@ order by income desc
 limit 10;
 
 select
-    concat(employees.first_name, ' ', employees.last_name) as seller,
-    floor(avg(sales.quantity * products.price)) as average_income
-from sales
-inner join employees on sales.sales_person_id = employees.employee_id
-inner join products on sales.product_id = products.product_id
+    concat(em.first_name, ' ', em.last_name) as seller,
+    floor(avg(s.quantity * pr.price)) as average_income
+from sales as s
+inner join employees as em on s.sales_person_id = em.employee_id
+inner join products as pr on s.product_id = pr.product_id
 group by seller
 having
     avg(
-        sales.quantity * products.price) < (
-        select avg(sales.quantity * products.price)
-        from sales
-        inner join products on sales.product_id = products.product_id
+        s.quantity * pr.price) < (
+        select avg(sl.quantity * prd.price) as average_all
+        from sales as sl
+        inner join products as prd on sl.product_id = prd.product_id
     )
 order by average_income;
 
