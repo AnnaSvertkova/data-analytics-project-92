@@ -12,28 +12,28 @@ group by seller
 order by income desc
 limit 10;
 
-with tab as (
-    select floor(avg(sales.quantity * products.price)) as average_all
-    from sales
-    inner join products on sales.product_id = products.product_id
-)
-
 select
     concat(employees.first_name, ' ', employees.last_name) as seller,
     floor(avg(sales.quantity * products.price)) as average_income
-from employees
-inner join sales on employees.employee_id = sales.sales_person_id
+from sales
+inner join employees on sales.sales_person_id = employees.employee_id
 inner join products on sales.product_id = products.product_id
 group by seller
-having avg(sales.quantity * products.price) < (select tab.average_all from tab)
+having
+    avg(
+        sales.quantity * products.price) < (
+        select avg(sales.quantity * products.price)
+        from sales
+        inner join products on sales.product_id = products.product_id
+    )
 order by average_income;
 
 select
     concat(employees.first_name, ' ', employees.last_name) as seller,
     to_char(sales.sale_date, 'day') as day_of_week,
     floor(sum(sales.quantity * products.price)) as income
-from employees
-inner join sales on employees.employee_id = sales.sales_person_id
+from sales
+inner join employees on sales.sales_person_id = employees.employee_id
 inner join products on sales.product_id = products.product_id
 group by extract(isodow from sales.sale_date), seller, day_of_week
 order by extract(isodow from sales.sale_date), seller;
