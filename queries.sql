@@ -63,9 +63,9 @@ with tab as (
         sales.sale_date,
         concat(customers.first_name, ' ', customers.last_name) as customer,
         concat(employees.first_name, ' ', employees.last_name) as seller,
- row_number() over (
+        row_number() over (
             partition by customers.first_name, customers.last_name
-            order by sale_date
+            order by sales.sale_date
         ) as rn
     from sales
     left join customers on sales.customer_id = customers.customer_id
@@ -73,23 +73,11 @@ with tab as (
     left join products on sales.product_id = products.product_id
     where products.price = 0
     order by customers.customer_id
-),
-
-tab2 as (
-    select
-        customer,
-        sale_date,
-        seller,
-        row_number() over (
-            partition by customer
-            order by sale_date
-        ) as rn
-    from tab
 )
 
 select
     customer,
     sale_date,
     seller
-from tab2
+from tab
 where rn = 1;
