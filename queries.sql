@@ -5,8 +5,8 @@ select
     concat(employees.first_name, ' ', employees.last_name) as seller,
     count(sales.sales_person_id) as operations,
     floor(sum(sales.quantity * products.price)) as income
-from employees
-inner join sales on employees.employee_id = sales.sales_person_id
+from sales
+inner join employees on sales.sales_person_id = employees.employee_id
 inner join products on sales.product_id = products.product_id
 group by seller
 order by income desc
@@ -62,7 +62,11 @@ with tab as (
     select
         sales.sale_date,
         concat(customers.first_name, ' ', customers.last_name) as customer,
-        concat(employees.first_name, ' ', employees.last_name) as seller
+        concat(employees.first_name, ' ', employees.last_name) as seller,
+ row_number() over (
+            partition by customers.first_name, customers.last_name
+            order by sale_date
+        ) as rn
     from sales
     left join customers on sales.customer_id = customers.customer_id
     left join employees on sales.sales_person_id = employees.employee_id
